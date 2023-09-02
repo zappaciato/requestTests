@@ -96,9 +96,9 @@ class Request {
             'secondFieldData' => 'bar'
         );
         $curlData = $this->curlInit($postRequest);
+        $msg = "I am sending the POST request NOW! Port: " . $this->port . " HttpMethod: " . $this->httpMethod . ' //  ' . $this->statusCodeDisplay($curlData['status_code']);
 
-        //nie wiem dlaczego status code display wyrzuca na poczatek linijki zamiast na koniec???
-        echo "I am sending the POST request NOW! Port: " . $this->port . " HttpMethod: " . $this->httpMethod . ' //  ' . $this->statusCodeDisplay($curlData['status_code']);
+        Log::getLog($msg, $curlData);
     }
 
 
@@ -107,8 +107,14 @@ class Request {
 
         $curlData = $this->curlInit();
 
-        echo "I am sending the GET request NOW! Port: " . $this->port . " HttpMethod: " . $this->httpMethod . ' //  ' .
+        $msg = "I am sending the GET request NOW! Port: " . $this->port . " HttpMethod: " . $this->httpMethod . ' //  ' .
         $this->statusCodeDisplay($curlData['status_code']);
+
+        //czy w takim wypadku to tak powinno sie robic, czy static function.. ? 
+        // $log = new Log();
+        // $log->getLog($curlData);
+        Log::getLog($msg);
+
     }
 
     private function curlInit ($postRequest = null) {
@@ -127,14 +133,16 @@ class Request {
             curl_close($ch);
             // array_push();
             $curlData = ['ch' => $ch, 'server_output' => $server_output, 'status_code' => $statusCode];
+            Log::getLog("This is CurlData:: ", $curlData);
         } else {
 
             curl_close($ch);
             // array_push();
             $curlData = ['ch' => $ch, 'server_output' => $server_output, 'status_code' => $statusCode];
+            Log::getLog("This is CurlData:: ", $curlData);
         }
 
-        var_dump($curlData);
+        Log::getLog("This is CurlData:: ", $curlData);
         return $curlData;
     }
 }
