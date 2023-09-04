@@ -1,13 +1,13 @@
 <?php
 
-include 'Request.php';
+include 'Classes/Request.php';
 // include 'originalReq.php';
-include 'Log.php';
+include 'Classes/Log.php';
 
 $url = "https://www.google.co.uk/search?q=cow";
 // $url = 'https://jsonplaceholder.typicode.com/todos/1';
 // $url = '';
-$httpMethod = "GET";
+$httpMethod = "POST";
 
 
 $firstRequest = new Request();

@@ -1,6 +1,6 @@
 <?php
 
-include "DefinedVaribles.php";
+include "interfaces/DefinedVaribles.php";
 
 class Request implements DefinedVaribles
 {
@@ -8,7 +8,7 @@ class Request implements DefinedVaribles
     public string $url;
     public int $port = 80;
     public string $httpMethod;
-    public array $curlData = ['data' => "no data available"];//tutaj trzeba zabezpieczyc jak wpadna niewlasciwe dane validacja tego
+
     private array $allowedHttppMethods = DefinedVaribles::HTTP_METHODS;
     private array $httpStatusCodes = DefinedVaribles::HTTP_STATUS_CODES;
 
@@ -45,7 +45,7 @@ class Request implements DefinedVaribles
         } else {
             echo "  This is the STATUS CODE info: " . $this->httpStatusCodes[$e];
         }
-        //tutaj zwracam, zeby wiswiedlic info  w displycurrent data
+        //tutaj zwracam, zeby wyswietlic info  w displycurrent data
         return $this->httpStatusCodes[$e];
     }
 
@@ -78,14 +78,13 @@ class Request implements DefinedVaribles
 
     public function curlGETRqs()
     {
-        // echo "  I am doin the GETrqs  ";
         $this->curlInit();
 
     }
 
     private function curlInit($postRequest = null)
     {
-        // echo " I am initializing curlInt!  ";
+
         $ch = curl_init($this->url);
         curl_setopt($ch, CURLOPT_URL, $this->url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -93,22 +92,20 @@ class Request implements DefinedVaribles
         $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
         if ($this->httpMethod == "POST") {
-            // echo " I have cheked and this is POST request  ";
+
             curl_setopt($ch, CURLOPT_POSTFIELDS, $postRequest);
             curl_setopt($ch, CURLOPT_POST, 1);
-            curl_close($ch);
+            $curlData = ['ch' => $ch, 'server_output' => $server_output, 'status_code' => $statusCode];
+            $this->displayCurrentData($curlData);
+
+        } 
             
-            $curlData = ['ch' => $ch, 'server_output' => $server_output, 'status_code' => $statusCode];
-            $this->displayCurrentData($curlData);
+        $curlData = ['ch' => $ch, 'server_output' => $server_output, 'status_code' => $statusCode];
 
-        } else {
-            // echo " I have cheked and this is GET request  ";
-            curl_close($ch);
-            $curlData = ['ch' => $ch, 'server_output' => $server_output, 'status_code' => $statusCode];
-            $this->displayCurrentData($curlData);
-        }
+        curl_close($ch);
+        $this->displayCurrentData($curlData);
+        
 
-        return $curlData;
     }
 
 
@@ -123,8 +120,7 @@ class Request implements DefinedVaribles
         $data = [
             'port' => $port,
             'httpMethod' => $method,
-            'statusCode' => $statusCode,
-            'statusCodeMessage' => $statusCodeMsg,
+            'statusCode' => $statusCode . " :: " . $statusCodeMsg,
             'server_output' => $serverOutput
         ];
 
