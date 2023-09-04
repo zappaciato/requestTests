@@ -1,152 +1,139 @@
 <?php
 
-class Request {
+include "DefinedVaribles.php";
+
+class Request implements DefinedVaribles
+{
 
     public string $url;
-    public int $port; 
-    public string $httpMethod; 
-    public array $curlData;
+    public int $port = 80;
+    public string $httpMethod;
+    public array $curlData = ['data' => "no data available"];//tutaj trzeba zabezpieczyc jak wpadna niewlasciwe dane validacja tego
+    private array $allowedHttppMethods = DefinedVaribles::HTTP_METHODS;
+    private array $httpStatusCodes = DefinedVaribles::HTTP_STATUS_CODES;
 
-    public function getCurrentPort($url) {
-        $addressPort = substr($url, 0, 5);
-        if ($addressPort == "https") {
-            $port = 442;
-        } else {
-            $port = 80;
-        }
-
-        return $port;
+    private function updatePort()
+    {
+        // echo "  I am updating port number.  ";
+        $addressPort = substr($this->url, 0, 5);
+        if (strtolower($addressPort) == "https") {
+            $this->port = 442;
+        } 
     }
 
 
-    private function validateData() {
-
+    private function validateData()
+    {
+        $this->updatePort();
+        // echo "  I am validating data!  ";
         if (!isset($this->url)) {
-            throw new Exception('No address given');
+            throw new Exception('No valid or no address given');
+        }
+
+        if (!in_array($this->httpMethod ?? null, $this->allowedHttppMethods)) {
+            throw new Exception('No valid or incorrect HTTPMethod given');
         } 
 
-        if (!isset($this->httpMethod)) {
-            throw new Exception('No valid HTTPMethod given');
-        } else {
-            // echo $this->httpMethod;
-            // ten switch robilem po to zeby zwalidowac poprawność wpisanej metody http. Mozna to inaczej ale pomyslalem, ze ten sposob bedzie ok w razie gdyby jeszcze zostaly inne rzeczy do walidacji specyficzne do kazdej z tych metod. 
-            switch (strtoupper($this->httpMethod)) {
-                
-                case 'POST': 
-                    $this->httpMethod = 'POST';
-                    break;
-
-                case 'GET':
-                    $this->httpMethod = 'GET';
-                    break;
-//tu jednak cos mi mowi, ze nie jest ok jak default zwraca incorrect method given.. ale nie mam pewnosci
-                default:
-                    throw new Exception('Incorrect httpMethod given!');
-            }
-        }
-
     }
 
-// poniższa metoda wyswietli nam status wraz ze znaczeniem. 
-    public function statusCodeDisplay($e){
-        switch ($e) {
-            case 404:
-                $e = 404 . " Not found!!! ";
-                echo $e;
-                break;
-
-            case 405:
-                $e = 404 . " Method Not Allowed!!! ";
-                echo $e;
-                break;
-            
-            case 200: 
-                $e = 200 . " OK!!! ";
-                echo $e;
-                break;
-
-            case 302:
-                $e = 302 . " Found!!! ";
-                echo $e;
-                break;
-        }
-    }
-
-    public function sendRqs ()
+    private function statusCodeMessage($e)
     {
+        echo " I am checking STATUS Code  ";
+        // if (!array_key_exists($e ?? null, $this->httpStatusCodes))
+        if(isset($httpStatusCodes[$e])) {
+            echo "  No Status code in the Database! " . $e;
+        } else {
+            echo "  This is the STATUS CODE info: " . $this->httpStatusCodes[$e];
+        }
+        //tutaj zwracam, zeby wiswiedlic info  w displycurrent data
+        return $this->httpStatusCodes[$e];
+    }
+
+    public function sendRqs()
+    {
+        // echo "i am sending the request!  ";
         $this->validateData();
-        //tutaj wzialem pod uwage jedyne dwie metody, jesli wiecej to bym robil elseif. Po sprawdzeniu ktora to metoda odpala odpowiednia metode
-        if($this->httpMethod == "POST") {
+
+        if ($this->httpMethod == "POST") {
 
             $this->curlPOSTRqs();
-
         } else {
 
             $this->curlGETRqs();
-
         }
-        
     }
 
-    public function curlPOSTRqs() {
-
+    public function curlPOSTRqs()
+    {
+        // echo "  I am doin the POSTrqs  ";
         //dummy dane do POST
         $postRequest = array(
             'firstFieldData' => 'foo',
             'secondFieldData' => 'bar'
         );
-        $curlData = $this->curlInit($postRequest);
-        $msg = "I am sending the POST request NOW! Port: " . $this->port . " HttpMethod: " . $this->httpMethod . ' //  ' . $this->statusCodeDisplay($curlData['status_code']);
+        $this->curlInit($postRequest);
 
-        Log::getLog($msg, $curlData);
     }
 
 
     public function curlGETRqs()
     {
-
-        $curlData = $this->curlInit();
-
-        $msg = "I am sending the GET request NOW! Port: " . $this->port . " HttpMethod: " . $this->httpMethod . ' //  ' .
-        $this->statusCodeDisplay($curlData['status_code']);
-
-        //czy w takim wypadku to tak powinno sie robic, czy static function.. ? 
-        // $log = new Log();
-        // $log->getLog($curlData);
-        Log::getLog($msg);
+        // echo "  I am doin the GETrqs  ";
+        $this->curlInit();
 
     }
 
-    private function curlInit ($postRequest = null) {
-
+    private function curlInit($postRequest = null)
+    {
+        // echo " I am initializing curlInt!  ";
         $ch = curl_init($this->url);
         curl_setopt($ch, CURLOPT_URL, $this->url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $server_output = curl_exec($ch);
         $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-        if($this->httpMethod == "POST") {
-            
+        if ($this->httpMethod == "POST") {
+            // echo " I have cheked and this is POST request  ";
             curl_setopt($ch, CURLOPT_POSTFIELDS, $postRequest);
             curl_setopt($ch, CURLOPT_POST, 1);
-
             curl_close($ch);
-            // array_push();
+            
             $curlData = ['ch' => $ch, 'server_output' => $server_output, 'status_code' => $statusCode];
-            Log::getLog("This is CurlData:: ", $curlData);
+            $this->displayCurrentData($curlData);
+
         } else {
-
+            // echo " I have cheked and this is GET request  ";
             curl_close($ch);
-            // array_push();
             $curlData = ['ch' => $ch, 'server_output' => $server_output, 'status_code' => $statusCode];
-            Log::getLog("This is CurlData:: ", $curlData);
+            $this->displayCurrentData($curlData);
         }
 
-        Log::getLog("This is CurlData:: ", $curlData);
         return $curlData;
     }
+
+
+    public function displayCurrentData(array $dataFeed){
+
+        $port = $this->port;
+        $method = $this->httpMethod;
+        $statusCode = $dataFeed['status_code'];
+        $statusCodeMsg = $this->statusCodeMessage($statusCode);
+        $serverOutput = $dataFeed['server_output'];
+
+        $data = [
+            'port' => $port,
+            'httpMethod' => $method,
+            'statusCode' => $statusCode,
+            'statusCodeMessage' => $statusCodeMsg,
+            'server_output' => $serverOutput
+        ];
+
+        print_r($data);
+    }
+
 }
 
+    
 
 //popularne klasy do wysylania requestow (port 80, 442 https) czy http czy https;
 
