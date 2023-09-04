@@ -1,0 +1,20 @@
+{
+    "name": "phptraining",
+    "type": "project",
+    "description": "PHP Training and Learning",
+    "keywords": ["PHP", "Training"],
+    "license": "KRIS",
+    "require": {
+        "php": "^8.0.2",
+    },
+    "require-dev": {
+
+    },
+    "autoload": {
+        
+        "psr-4": {
+            "TrainingApp\\": "src/"
+        }
+
+    }
+}
