@@ -1,6 +1,14 @@
 <?php
 
-include "interfaces/DefinedVaribles.php";
+namespace Kris\TestProject;
+
+use DefinedVaribles;
+use Exception;
+
+// include "../src/Classes/interfaces/DefinedVaribles.php";
+// use Kris\TestProject\Classes\interfaces\DefinedVaribles;
+// use TrainingApp\DefinedVaribles;
+// use Exception;
 
 class Request implements DefinedVaribles
 {
@@ -23,7 +31,7 @@ class Request implements DefinedVaribles
 
 
     private function validateData()
-    {
+    { 
         $this->updatePort();
         // echo "  I am validating data!  ";
         if (!isset($this->url)) {

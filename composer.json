@@ -1,20 +1,25 @@
 {
-    "name": "phptraining",
-    "type": "project",
+    "$schema": "https://json-schema.org/draft-04/schema#",
+
     "description": "PHP Training and Learning",
     "keywords": ["PHP", "Training"],
     "license": "KRIS",
     "require": {
-        "php": "^8.0.2",
+        "php": "^8.0.2"
     },
     "require-dev": {
-
+        "phpunit/phpunit": "^10.3"
     },
-    "autoload": {
-        
+     "autoload": {
         "psr-4": {
-            "TrainingApp\\": "src/"
+            "Kris\\TestProject\\": "src/"
         }
-
-    }
+    },
+    "authors": [
+        {
+            "name": "Krzysztof Flakiewcz",
+            "email": "krzysztof.flakiewicz@gmail.com"
+        }
+    ]
+    
 }

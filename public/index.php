@@ -1,8 +1,14 @@
 <?php
 
-include 'Classes/Request.php';
-// include 'originalReq.php';
-include 'Classes/Log.php';
+namespace Kris\TestProject;
+
+use Kris\TestProject\Classes\Request;
+use Kris\TestProject\Classes\Log;
+use Kris\TestProject\Classes\Request as TestProjectRequest;
+
+include '../src/Classes/Request.php';
+// // include 'originalReq.php';
+// include '../src/Classes/Log.php';
 
 $url = "https://www.google.co.uk/search?q=cow";
 // $url = 'https://jsonplaceholder.typicode.com/todos/1';
