@@ -5,7 +5,9 @@ require '../vendor/autoload.php';
 use Kris\TestProject\Classes\Request;
 use Kris\TestProject\Classes\Database;
 use Kris\TestProject\Classes\DefinedVaribles;
-
+use Kris\TestProject\Classes\MathClasses\Anagram;
+use Kris\TestProject\Classes\MathClasses\Circle;
+use Kris\TestProject\Classes\MathClasses\Rectangle;
 
 
 //REQUEST CLASS
@@ -34,10 +36,10 @@ try {
 
 $db_connection_credentials = DefinedVaribles::DB_DATA;
 
-// $host = $db_connection_credentials['host'];
-// $user = $db_connection_credentials['user'];
-// $pwd =  $db_connection_credentials['pwd'];
-// $db_name = $db_connection_credentials['db_name'];
+$host = $db_connection_credentials['host'];
+$user = $db_connection_credentials['user'];
+$pwd =  $db_connection_credentials['pwd'];
+$db_name = $db_connection_credentials['db_name'];
 
 try {
     $db = new Database($host, $user, $pwd, $db_name);
@@ -64,18 +66,38 @@ print_r($row);
 //     'email_addres' => "mDudi@gmail.com",
 //     'password' => "jfw8fjh3208848fh828f84hf",
 // ];
-$user_name = "Michvdeesagdfgel Duddikoff";
-$email_addres = "mDufwegfdsddi@gmail.com";
-$password = "jfw8ffsewgdfedjh3208848fh828f84hf";
+$user_name = "Michvdeesfsdagdfgel Duddikoff";
+$email_addres = "mDuffsdwegfdsddi@gmail.com";
+$password = "jfw8ffsefsdwgdfedjh3208848fh828f84hf";
 
 // $sqlQuery2 = "INSERT INTO users (name, email, password) VALUES ($user_name, $email_addres, $password);";// To jest zly zapis do MariaDB
- $sqlInsert = "INSERT INTO users " . "(name, email, password) " . "VALUES" . "('$user_name','$email_addres','$password')";
-// '$newUserCredentials['user_name']','$newUserCredentials['email_addres']','$newUserCredentials['password']'
-if($db_link->query($sqlInsert) === true) {
-    echo "New Recodrd has been added successfully";
+//  $sqlInsert = "INSERT INTO users " . "(name, email, password) " . "VALUES" . "('$user_name','$email_addres','$password')";
+// // '$newUserCredentials['user_name']','$newUserCredentials['email_addres']','$newUserCredentials['password']'
+// if($db_link->query($sqlInsert) === true) {
+//     echo "New Recodrd has been added successfully";
 
-} else {
-    echo "Error: " . $sqlInsert . "<br>" . $db_link->error;
-}
+// } else {
+//     echo "Error: " . $sqlInsert . "<br>" . $db_link->error;
+// }
 
 //End of DB connection testing; 
+
+
+// testing math classes
+
+$rectagnle = new Rectangle(23, 45);
+$rectagnle->calcArea();
+echo "Pole prostokata: " . $rectagnle->calcArea();
+echo "Obwód prostokata: " . $rectagnle->calcPerimeter();
+
+$circle = new Circle(23);
+echo "Pole koła: " .
+$circle->calcPerimeter();
+echo "Obwód koła: " .
+$circle->calcArea();
+
+$rectagnle->displayResult('rectange', 'area', $rectagnle->calcArea());
+
+
+$aaa = new Anagram("aonaggo", "gnagaoo");
+$aaa->displayAnagramResults();
