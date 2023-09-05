@@ -1,5 +1,7 @@
 <?php
 
+namespace Kris\TestProject;
+
 class Log {
 
 
