@@ -7,10 +7,10 @@ use mysqli;
 
 class Database implements DefinedVaribles {
 
-    private $user;
-    private $host;
-    private $pwd;
-    private $db_name;
+    private $host       = DefinedVaribles::DB_DATA['host'];
+    private $user       = DefinedVaribles::DB_DATA['user'];
+    private $pwd        = DefinedVaribles::DB_DATA['pwd'];
+    private $db_name    = DefinedVaribles::DB_DATA['db_name'];
 
     
 
@@ -21,10 +21,10 @@ class Database implements DefinedVaribles {
         // $this->pwd = "";
         // $this->db_name = "Kris_db";
 
-        $this->user = $user;
-        $this->host = $host;
-        $this->pwd = $pwd;
-        $this->db_name = $db_name;
+        // $this->user = $user;
+        // $this->host = $host;
+        // $this->pwd = $pwd;
+        // $this->db_name = $db_name;
     }
     public function connect()
     {

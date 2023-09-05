@@ -4,7 +4,11 @@ require '../vendor/autoload.php';
 
 use Kris\TestProject\Classes\Request;
 use Kris\TestProject\Classes\Database;
+use Kris\TestProject\Classes\DefinedVaribles;
 
+
+
+//REQUEST CLASS
 // $url = "https://www.google.co.uk/search?q=cow";
 $url = 'https://jsonplaceholder.typicode.com/todos/1';
 // $url = '';
@@ -26,14 +30,18 @@ try {
     echo $e->getMessage();
 }
 
+//DataBase connection (retrieve, add)
+
+$db_connection_credentials = DefinedVaribles::DB_DATA;
+
+// $host = $db_connection_credentials['host'];
+// $user = $db_connection_credentials['user'];
+// $pwd =  $db_connection_credentials['pwd'];
+// $db_name = $db_connection_credentials['db_name'];
 
 try {
-    $user = "root";
-    $host = "localhost";
-    $pwd = "";
-    $db_name = "testowa";
     $db = new Database($host, $user, $pwd, $db_name);
-    $link = $db->connect();
+    $db_link = $db->connect();
     echo "Weszlo";
 } catch (Exception $e) {
     // print_r($e);
@@ -41,6 +49,33 @@ try {
 }
 
 
-$sqlQuery = "SELECT * from users";
-$resultOutput = $link->query($sqlQuery);
-print_r($resultOutput);
+$sqlSelect = "SELECT * from users";
+$resultOutput = $db_link->query($sqlSelect);
+$row = [];
+
+if ($resultOutput->num_rows > 0) {
+    // fetch all data from db into array 
+    $row = $resultOutput->fetch_all(MYSQLI_ASSOC);
+}
+print_r($row);
+
+// $newUserCredentials = [
+//     'user_name' => "Michael Duddikoff",
+//     'email_addres' => "mDudi@gmail.com",
+//     'password' => "jfw8fjh3208848fh828f84hf",
+// ];
+$user_name = "Michvdeesagdfgel Duddikoff";
+$email_addres = "mDufwegfdsddi@gmail.com";
+$password = "jfw8ffsewgdfedjh3208848fh828f84hf";
+
+// $sqlQuery2 = "INSERT INTO users (name, email, password) VALUES ($user_name, $email_addres, $password);";// To jest zly zapis do MariaDB
+ $sqlInsert = "INSERT INTO users " . "(name, email, password) " . "VALUES" . "('$user_name','$email_addres','$password')";
+// '$newUserCredentials['user_name']','$newUserCredentials['email_addres']','$newUserCredentials['password']'
+if($db_link->query($sqlInsert) === true) {
+    echo "New Recodrd has been added successfully";
+
+} else {
+    echo "Error: " . $sqlInsert . "<br>" . $db_link->error;
+}
+
+//End of DB connection testing; 

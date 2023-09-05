@@ -90,8 +90,8 @@ interface DefinedVaribles {
     ];
 
     const DB_DATA = [
-            'user'      => "root",
             'host'      => "localhost",
+            'user'      => "root",
             'pwd'       => "",
             'db_name'   => "testowa",
     ];
