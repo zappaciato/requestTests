@@ -18,19 +18,19 @@ $httpMethod = "POST";
 
 
 
-$firstRequest = new Request();
-$firstRequest->url = $url;
-$firstRequest->httpMethod = $httpMethod;
+// $firstRequest = new Request();
+// $firstRequest->url = $url;
+// $firstRequest->httpMethod = $httpMethod;
 // $firstRequest->updatePort();
 // $firstRequest->displayCurrentData();
 // $firstRequest->port = $firstRequest->updatePort($url);
 
 
-try {
-    $firstRequest->sendRqs();
-} catch (Exception $e) {
-    echo $e->getMessage();
-}
+// try {
+//     $firstRequest->sendRqs();
+// } catch (Exception $e) {
+//     echo $e->getMessage();
+// }
 
 //DataBase connection (retrieve, add)
 
@@ -61,24 +61,24 @@ try {
     echo "Nie weszło";
 }
 
-$sqlSelect = "SELECT * from users";
-$resultOutput = $db_link->query($sqlSelect);
-$row = [];
+// $sqlSelect = "SELECT * from users";
+// $resultOutput = $db_link->query($sqlSelect);
+// $row = [];
 
-if ($resultOutput->num_rows > 0) {
-    // fetch all data from db into array 
-    $row = $resultOutput->fetch_all(MYSQLI_ASSOC);
-}
-print_r($row);
+// if ($resultOutput->num_rows > 0) {
+//     // fetch all data from db into array 
+//     $row = $resultOutput->fetch_all(MYSQLI_ASSOC);
+// }
+// print_r($row);
 
 // $newUserCredentials = [
 //     'user_name' => "Michael Duddikoff",
 //     'email_addres' => "mDudi@gmail.com",
 //     'password' => "jfw8fjh3208848fh828f84hf",
 // ];
-$user_name = "Michvdeesfsdagdfgel Duddikoff";
-$email_addres = "mDuffsdwegfdsddi@gmail.com";
-$password = "jfw8ffsefsdwgdfedjh3208848fh828f84hf";
+// $user_name = "Michvdeesfsdagdfgel Duddikoff";
+// $email_addres = "mDuffsdwegfdsddi@gmail.com";
+// $password = "jfw8ffsefsdwgdfedjh3208848fh828f84hf";
 
 // $sqlQuery2 = "INSERT INTO users (name, email, password) VALUES ($user_name, $email_addres, $password);";// To jest zly zapis do MariaDB
 //  $sqlInsert = "INSERT INTO users " . "(name, email, password) " . "VALUES" . "('$user_name','$email_addres','$password')";
@@ -95,19 +95,95 @@ $password = "jfw8ffsefsdwgdfedjh3208848fh828f84hf";
 
 // testing math classes
 
-$rectagnle = new Rectangle(23, 45);
-$rectagnle->calcArea();
-echo "Pole prostokata: " . $rectagnle->calcArea();
-echo "Obwód prostokata: " . $rectagnle->calcPerimeter();
+// $rectagnle = new Rectangle(23, 45);
+// $rectagnle->calcArea();
+// echo "Pole prostokata: " . $rectagnle->calcArea();
+// echo "Obwód prostokata: " . $rectagnle->calcPerimeter();
 
-$circle = new Circle(23);
+$radius = 33;
+// $circle = new Circle(23);
+// echo "Pole koła: " .
+//     $circle->calcPerimeter();
+// echo "Obwód koła: " .
+//     $circle->calcArea();
+
+// $rectagnle->displayResult('rectange', 'area', $rectagnle->calcArea());
+
+$wordOne = "";
+$wordTwo = "";
+
+// print_r($_SERVER['REQUEST_METHOD']);
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Retrieve form data
+    $wordOne = $_POST["wordOne"];
+    $wordTwo = $_POST["wordTwo"];
+}
+
+$anagramWordsAppInit = new Anagram($wordOne, $wordTwo);
+$resultMessage = $anagramWordsAppInit->displayAnagramResults() ? " PERFECT ANAGRAMS" : " NOT ANAGRAMS";
+$diff = $anagramWordsAppInit->arrayDiff;
+echo "HEEEEERE COMES THE DIFFERENCE!!";
+print_r($diff);
+
+
+// if (
+//     $_SERVER["REQUEST_METHOD"] == "POST"
+// ) {
+//     // Retrieve form data
+//     $radius = $_POST["radius"];
+// }
+
+$circle = new Circle($radius);
 echo "Pole koła: " .
-$circle->calcPerimeter();
+    $circlePerimeter = $circle->calcPerimeter();
 echo "Obwód koła: " .
-$circle->calcArea();
+    $circleArea = $circle->calcArea();
 
-$rectagnle->displayResult('rectange', 'area', $rectagnle->calcArea());
+?>
+<!DOCTYPE html>
+<html>
 
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
 
-$aaa = new Anagram("aonaggo", "gnagaoo");
-$aaa->displayAnagramResults();
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="">
+
+                <div> <img style="width: 200px; height: 200px;" src="../Files/images/circle.png" alt="circle"></div>
+                <p>Input radius</p>
+                <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                    <input type="text" name="radius">
+                    <input type="submit" value="Submit">
+                </form>
+                <h1>This is the area of your circle: <?php echo $circleArea ?></h1>
+                <h1>This is the perimeter of your circle: <?php echo $circlePerimeter ?></h1>
+                <div class="table-responsive">
+
+                </div>
+            </div>
+            <h1>------------------------------------------------------------- <h1>
+                    <div>
+                        <h4>Check if this is an anagram:</h4>
+                        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                            <input type="text" name="wordOne" placeholder="word one">
+                            <input type="text" name="wordTwo" placeholder="word two">
+                            <input type="submit" value="Submit">
+                        </form>
+                        <h4>This is the generic message: <?php echo $resultMessage ?></h4>
+                        <h4>The word <?php echo " \"" . $wordOne . "\""?> and the word <?php echo " \"" . $wordTwo  . "\"" ?> are: </h4>
+                        <h3><?php echo $resultMessage ?></h3>
+                        <h5>The difference is: </h5>
+                        <?php if($diff !== null) {
+                        foreach($diff as $missingMatches) { ?>
+                            <h1 style="color: red"><?php print_r($missingMatches) ?></h1>
+                         <?php } }?>
+                    </div>
+        </div>
+    </div>
+</body>
+
+</html>
