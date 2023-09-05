@@ -36,20 +36,30 @@ try {
 
 $db_connection_credentials = DefinedVaribles::DB_DATA;
 
-$host = $db_connection_credentials['host'];
-$user = $db_connection_credentials['user'];
-$pwd =  $db_connection_credentials['pwd'];
-$db_name = $db_connection_credentials['db_name'];
+// $host = $db_connection_credentials['host'];
+// $user = $db_connection_credentials['user'];
+// $pwd =  $db_connection_credentials['pwd'];
+// $db_name = $db_connection_credentials['db_name'];
+
+// try {
+//     $db = new Database($host, $user, $pwd, $db_name);
+//     $db_link = $db->connect();
+//     echo "Weszlo";
+// } catch (Exception $e) {
+//     // print_r($e);
+//     echo "Nie weszło";
+// }
 
 try {
-    $db = new Database($host, $user, $pwd, $db_name);
-    $db_link = $db->connect();
+    $instance = Database::getInstance();
+    var_dump($instance);
+    $db_link = $instance->getConnection();
+    var_dump($db_link);
     echo "Weszlo";
 } catch (Exception $e) {
     // print_r($e);
     echo "Nie weszło";
 }
-
 
 $sqlSelect = "SELECT * from users";
 $resultOutput = $db_link->query($sqlSelect);
