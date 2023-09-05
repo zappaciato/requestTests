@@ -1,14 +1,16 @@
 <?php
 
-namespace Kris\TestProject;
+namespace Kris\TestProject\Classes;
 
-use DefinedVaribles;
+use Kris\TestProject\Classes\DefinedVaribles;
+use Kris\TestProject\Classes\Database;
 use Exception;
 
 // include "../src/Classes/interfaces/DefinedVaribles.php";
 // use Kris\TestProject\Classes\interfaces\DefinedVaribles;
 // use TrainingApp\DefinedVaribles;
 // use Exception;
+
 
 class Request implements DefinedVaribles
 {
@@ -19,6 +21,14 @@ class Request implements DefinedVaribles
 
     private array $allowedHttppMethods = DefinedVaribles::HTTP_METHODS;
     private array $httpStatusCodes = DefinedVaribles::HTTP_STATUS_CODES;
+
+    // dopytac czy i kiedy lepiej dzialac w ten sposob; czyli dodaje wartosci default w momencie odpalenia instancji klasy; 
+    // public function __construct()
+    // {
+    //     $this->url = "https://stackoverflow.com/questions/49948856/phpunit-testing-constructorless-class";
+    //     $this->port = 80;
+    //     $this->httpMethod = "GET";
+    // }
 
     private function updatePort()
     {
@@ -134,6 +144,20 @@ class Request implements DefinedVaribles
 
         print_r($data);
     }
+
+    //to nie powinno byc tutaj
+    // public function connect_db() {
+    //     $user = "root";
+    //     $host = "localhost";
+    //     $pwd = "";
+    //     $db_name = "Kris_db";
+    //     $db = new Database($host, $user, $pwd, $db_name);
+    //     $link = $db->connect();
+    //     print_r($link);
+    //     return $link;
+    //     // print_r($db);
+
+    // }
 
 }
 

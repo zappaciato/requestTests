@@ -1,5 +1,7 @@
 <?php
 
+namespace Kris\TestProject\Classes;
+
 interface DefinedVaribles {
 
     const HTTP_METHODS = ['POST', 'GET'];
@@ -85,6 +87,13 @@ interface DefinedVaribles {
             598 => 'Server Error: Network read timeout error',
             599 => 'Server Error: Network connect timeout error',
 
+    ];
+
+    const DB_DATA = [
+            'user'      => "root",
+            'host'      => "localhost",
+            'pwd'       => "",
+            'db_name'   => "testowa",
     ];
 
 }
