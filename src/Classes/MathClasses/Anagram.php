@@ -46,8 +46,6 @@ class Anagram {
             $this->explodeStrings($this->wordOne, $this->wordTwo);
             $this->sortArray($this->formattedWords);
 
-            print_r($this->formattedWords);
-
         } else {
 
             echo "There are either two words or there's space between";
@@ -81,7 +79,6 @@ class Anagram {
             
         } else {
 
-            echo "One word is missing.";
             return $this->formattedWords;
         }
     }
@@ -89,7 +86,7 @@ class Anagram {
     private function checkAnagram() : array {
 
         $arrayDiff = [];
-        echo " i am PREPARING text";
+
         $this->prepareText();
         $arrayDiff = $this->getDifference();
 
@@ -101,9 +98,6 @@ class Anagram {
 
         if ($this->formattedWords['wordOne'] && $this->formattedWords['wordTwo']) {
             $arrayDiff = array_merge(array_diff_assoc($this->formattedWords['wordOne'], $this->formattedWords['wordTwo']), array_diff_assoc($this->formattedWords['wordTwo'], $this->formattedWords['wordOne']));
-
-            echo "differemncececcccccccccccccccccccccccccccccccc";
-            print_r($arrayDiff);
 
         } else {
             $arrayDiff = [];
