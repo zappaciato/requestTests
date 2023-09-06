@@ -34,7 +34,7 @@ $httpMethod = "POST";
 
 //DataBase connection (retrieve, add)
 
-// $db_connection_credentials = DefinedVaribles::DB_DATA;
+$db_connection_credentials = DefinedVaribles::DB_DATA;
 
 // $host = $db_connection_credentials['host'];
 // $user = $db_connection_credentials['user'];
@@ -50,16 +50,16 @@ $httpMethod = "POST";
 //     echo "Nie weszło";
 // }
 
-// try {
-//     $instance = Database::getInstance();
-//     var_dump($instance);
-//     $db_link = $instance->getConnection();
-//     var_dump($db_link);
-//     echo "Weszlo";
-// } catch (Exception $e) {
-//     // print_r($e);
-//     echo "Nie weszło";
-// }
+try {
+    $instance = Database::getInstance();
+    var_dump($instance);
+    $db_link = $instance->getConnection();
+    var_dump($db_link);
+    echo "Weszlo";
+} catch (Exception $e) {
+    // print_r($e);
+    echo "Nie weszło";
+}
 
 // $sqlSelect = "SELECT * from users";
 // $resultOutput = $db_link->query($sqlSelect);
@@ -100,7 +100,7 @@ $httpMethod = "POST";
 // echo "Pole prostokata: " . $rectagnle->calcArea();
 // echo "Obwód prostokata: " . $rectagnle->calcPerimeter();
 
-// $radius = 33;
+$radius = 33;
 // $circle = new Circle(23);
 // echo "Pole koła: " .
 //     $circle->calcPerimeter();
@@ -109,38 +109,21 @@ $httpMethod = "POST";
 
 // $rectagnle->displayResult('rectange', 'area', $rectagnle->calcArea());
 
-$wordOne = "";
-$wordTwo = "";
 
-// print_r($_SERVER['REQUEST_METHOD']);
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+// $aaa = new Anagram("aonaggo", "gnagaoo");
+// $aaa->displayAnagramResults();
+if (
+    $_SERVER["REQUEST_METHOD"] == "POST"
+) {
     // Retrieve form data
-    $wordOne = $_POST["wordOne"];
-    $wordTwo = $_POST["wordTwo"];
+    $radius = $_POST["radius"];
 }
 
-$anagramWords = new Anagram($wordOne, $wordTwo);
-$diff = $anagramWords->displayAnagramResults();
-$resultMessage = $diff ? " NOT ANAGRAMS" : " PERFECT ANAGRAMS";
-
-// $diff = $anagramWords->getDifference();
-// echo "HEEEEERE COMES THE DIFFERENCE!!";
-// print_r($diff);
-
-
-// if (
-//     $_SERVER["REQUEST_METHOD"] == "POST"
-// ) {
-//     // Retrieve form data
-//     $radius = $_POST["radius"];
-// }
-// $radius = 33;
-// $circle = new Circle($radius);
-// echo "Pole koła: " .
-//     $circlePerimeter = $circle->calcPerimeter();
-// echo "Obwód koła: " .
-//     $circleArea = $circle->calcArea();
+$circle = new Circle($radius);
+echo "Pole koła: " .
+    $circlePerimeter = $circle->calcPerimeter();
+echo "Obwód koła: " .
+    $circleArea = $circle->calcArea();
 
 ?>
 <!DOCTYPE html>
@@ -161,48 +144,12 @@ $resultMessage = $diff ? " NOT ANAGRAMS" : " PERFECT ANAGRAMS";
                     <input type="text" name="radius">
                     <input type="submit" value="Submit">
                 </form>
-                <h1>This is the area of your circle: <? php // echo $circleArea 
-                                                        ?></h1>
-                <h1>This is the perimeter of your circle: <?php //echo $circlePerimeter 
-                                                            ?></h1>
+                <h1>This is the area of your circle: <?php echo $circleArea ?></h1>
+                <h1>This is the perimeter of your circle: <?php echo $circlePerimeter ?></h1>
                 <div class="table-responsive">
 
                 </div>
             </div>
-            <h1>------------------------------------------------------------- <h1>
-                <div>
-                    <h4>Check if this is an anagram:</h4>
-                    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                        <input type="text" name="wordOne" placeholder="word one">
-                        <input type="text" name="wordTwo" placeholder="word two">
-                        <input type="submit" value="Submit">
-                    </form>
-                    <h4>This is the generic message: <?php echo $resultMessage ?></h4>
-                    <h4>The word <?php echo " \"" . $wordOne . "\"" ?> and the word <?php echo " \"" . $wordTwo  . "\"" ?> are: </h4>
-                    <h3><?php echo $resultMessage ?></h3>
-                    <h5>The difference is: </h5>
-                    <table>
-                        <tr>
-                            <?php 
-                                if (!$diff == null || !$diff < 1) {
-                                    foreach ($diff as $missingMatches) { 
-                            ?>
-                            <td>
-                                <?php 
-                                    echo $missingMatches; 
-                                ?>
-                            </td>
-                        </tr>
-                    </table>
-                        <?php 
-                                    }
-                                } else { 
-                        ?>
-                    <h5>There are no differences between the two words. </h5>
-                        <?php 
-                                } 
-                        ?>
-                </div>
         </div>
     </div>
 </body>

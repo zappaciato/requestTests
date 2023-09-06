@@ -6,7 +6,7 @@ use Kris\TestProject\Classes\MathClasses\Shape;
 
 class Circle extends Shape
 {
-
+    use NiceDisplay;
     private int $radius;
     public $pi = 3.14;
 
@@ -16,17 +16,17 @@ class Circle extends Shape
         
     }
 
-    public function calcArea (): int
+    public function calcArea (): float
     {
         $area = pow($this->radius, 2) * $this->pi;
-
+        floatval($area);
         return $area;
     }
 
-    public function calcPerimeter(): int
+    public function calcPerimeter(): float
     {
         $perimeter = 2 * ($this->radius  * $this->pi);
-
+        floatval($perimeter);
         return $perimeter;
     }
 }

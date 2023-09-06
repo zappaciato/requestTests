@@ -4,85 +4,119 @@ namespace Kris\TestProject\Classes\MathClasses;
 
 class Anagram {
 
-    private string $wordOne;
-    private string $wordTwo;
-    private array $words;
-    private bool $result = false;
+    public string $wordOne;
+    public string $wordTwo;
+    private array $formattedWords = [];
 
+    public function __construct($wordOne, $wordTwo) {
 
-    public function __construct($wordOne, $wordTwo)
-    {
         $this->wordOne = $wordOne;
         $this->wordTwo = $wordTwo;
+
     }
 
-    private function validateText() : array {
-        echo " i am validating text";
-        //string to lower so the letters are the same case
-        strtolower($this->wordOne);
-        strtolower($this->wordTwo);
+    private function implodeStrings() : void {
 
-        //remove spaces at the front and back
-        trim($this->wordOne);
-        trim($this->wordTwo);
+        $this->wordOne = implode(' ', str_split($this->wordOne,1));
+        $this->wordTwo = implode(' ', str_split($this->wordTwo,1));
+
+    }
+
+    private function explodeStrings(): void {
+
+        $formattedWordOne = explode(' ', $this->wordOne);
+        $formattedWordTwo = explode(' ', $this->wordTwo);
+
+        $this->formattedWords = ['wordOne' => $formattedWordOne, 'wordTwo' => $formattedWordTwo];
+
+    }
+
+    private function sortArray() : void {
+
+        sort($this->formattedWords['wordOne']);
+        sort($this->formattedWords['wordTwo']);
+
+    }
+
+    private function prepareForComparison() : void {
 
         if (str_word_count($this->wordOne) == 1 && str_word_count($this->wordTwo) == 1) {
-            echo "One word no spaces";
-            //add spaces after each character to use explode and compare two arrays
-            $formattedWordOne = implode(' ', str_split($this->wordOne));
-            $formattedWordTwo = implode(' ', str_split($this->wordTwo));
-            $formattedWordOne = explode(' ', $formattedWordOne);
-            $formattedWordTwo = explode(' ', $formattedWordTwo);
 
-            $this->words = ['wordOne' => $formattedWordOne, 'wordTwo' => $formattedWordTwo];
+            $this->implodeStrings($this->wordOne, $this->wordTwo);
+            $this->explodeStrings($this->wordOne, $this->wordTwo);
+            $this->sortArray($this->formattedWords);
 
+            print_r($this->formattedWords);
 
         } else {
 
             echo "There are either two words or there's space between";
-            $this->words = null;
+
         }
 
-        return $this->words;
     }
 
-    private function checkAnagram() : bool {
-        echo "  I am checking the anagram   ";
+    private function trimStrings() : void {
 
-        $this->validateText();
-        print_r($this->words);
+        $this->wordOne = trim($this->wordOne);
+        $this->wordTwo = trim($this->wordTwo);
+    }
 
-            if(!empty($this->words)) {
+    private function makeLowerCaseStrings () : void {
 
-                echo " =-=============I am IN IF IN check Anagram   ";
-
-            // $arrayDiff = array_diff($this->words['wordOne'],$this->words['wordTwo']) ? array_diff($this->words['wordOne'], $this->words['wordTwo']) : " There is no difference between those words ";
-
-            $arrayDiff = array_diff($this->words['wordOne'], $this->words['wordTwo']) ? $this->result = 0 : $this->result = 1;
-
-            // $this->result = empty($arrayDiff) ? 1 : 0;
-
-            }
-
-
-
-        return $this->result;
+        $this->wordOne = strtolower($this->wordOne);
+        $this->wordTwo = strtolower($this->wordTwo);
 
     }
 
-    public function displayAnagramResults() : string {
-        
-        //check anagram will return false (0), if the arrays are the same;
-        
-        if($this->checkAnagram()) {
+    private function prepareText() : array {
 
-            $message = " Word: " . "\"" . $this->wordOne .  "\"" . " and Word: " .   "\"" . $this->wordTwo .  "\"" . " are ANAGRAMS ";
-            // echo "Word: " . $this->wordOne . " and Word: " . $this->wordTwo . " are ANAGRAMS";
+        if ($this->wordOne !== '' && $this->wordTwo !== '') { //czy tu mozna uzyc tez isset?
+
+            $this->makeLowerCaseStrings();
+            $this->trimStrings();
+            $this->prepareForComparison();
+
+            return $this->formattedWords;
+            
         } else {
-            $message = " Word: " . $this->wordOne . " and Word: " . $this->wordTwo . " are NOT (!!!) ANAGRAMS ";
-        };
 
-        return print_r($message);
+            echo "One word is missing.";
+            return $this->formattedWords;
+        }
+    }
+
+    private function checkAnagram() : array {
+
+        $arrayDiff = [];
+        echo " i am PREPARING text";
+        $this->prepareText();
+        $arrayDiff = $this->getDifference();
+
+        return $arrayDiff;
+
+    }
+
+    private function getDifference() : array {
+
+        if ($this->formattedWords['wordOne'] && $this->formattedWords['wordTwo']) {
+            $arrayDiff = array_merge(array_diff_assoc($this->formattedWords['wordOne'], $this->formattedWords['wordTwo']), array_diff_assoc($this->formattedWords['wordTwo'], $this->formattedWords['wordOne']));
+
+            echo "differemncececcccccccccccccccccccccccccccccccc";
+            print_r($arrayDiff);
+
+        } else {
+            $arrayDiff = [];
+        }
+        
+        return $arrayDiff;
+    }
+
+    public function displayAnagramResults() : array {
+        
+        $arrayDiff = $this->checkAnagram();
+
+        return $arrayDiff;
 
     }
 }

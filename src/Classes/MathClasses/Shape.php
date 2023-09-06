@@ -11,7 +11,7 @@ abstract class Shape
 {
     // use NiceDisplay;
 
-    abstract protected function calcArea() : int;
-    abstract protected function calcPerimeter() : int;
+    abstract protected function calcArea() : float;
+    abstract protected function calcPerimeter() : float;
 
 }
